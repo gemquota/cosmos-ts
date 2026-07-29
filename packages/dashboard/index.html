@@ -1,6 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f1118;color:#e0e0e0;padding:.6rem}
+.container{width:100%}
+h1{font-size:1.3rem;font-weight:700;margin-bottom:.05rem;background:linear-gradient(90deg,#7b2fff,#ff8c00,#00ff9f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{color:#666;font-size:.65rem;margin-bottom:.3rem}
+.filter-bar{display:flex;gap:.3rem;margin-bottom:.4rem;flex-wrap:wrap}
+.filter-btn{padding:3px 16px;border-radius:12px;font-size:.7rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#888;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem}
+.filter-btn:hover{border-color:rgba(123,47,255,.3);color:#ccc}
+.filter-btn.active{background:rgba(123,47,255,.15);border-color:#7b2fff;color:#a855f7}
+.card{background:#161822;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.6rem;width:100%;margin-bottom:.5rem}
+.card-header{font-size:.7rem;font-weight:600;color:#ccc;margin-bottom:.3rem;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.card-header .icon{font-size:.8rem}
+.hdr-sub{font-weight:400;font-size:.6rem;color:#666;margin-left:.4rem}
+.chart-toggle{font-size:.5rem;padding:1px 8px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#888;margin-left:auto;transition:all .2s;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.chart-toggle:hover{border-color:rgba(123,47,255,.3);color:#aaa;background:rgba(123,47,255,.08)}
+.chart-toggle.active{background:rgba(0,255,159,.1);border-color:rgba(0,255,159,.25);color:#00ff9f}
+.stacked-bar-wrap{padding:.2rem 0;width:100%}
+.stacked-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;background:rgba(255,255,255,.03)}
+.stacked-bar .seg{height:100%;transition:width .5s;min-width:2px}
+.stacked-bar .seg:first-child{border-radius:6px 0 0 6px}
+.stacked-bar .seg:last-child{border-radius:0 6px 6px 0}
+.stacked-legend{display:flex;flex-wrap:wrap;gap:.2rem .5rem;margin-top:.35rem;font-size:.55rem}
+.stacked-legend .leg-item{display:flex;align-items:center;gap:.2rem;color:#999}
+.stacked-legend .leg-swatch{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.comp-row{display:flex;align-items:center;gap:.25rem;margin-bottom:.15rem;font-size:.6rem}
+.comp-row .lbl{width:50px;text-align:right;color:#888;flex-shrink:0}
+.comp-row .track{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.comp-row .fill{height:100%;border-radius:4px;transition:width .5s}
+.comp-row .pct{color:#555;font-size:.55rem;width:36px;text-align:right}
+.donut-wrap{display:flex;align-items:center;gap:.5rem}
+.donut{width:90px;height:90px;border-radius:50%;flex-shrink:0;overflow:hidden}
+.donut-legend{font-size:.55rem;flex:1;min-width:0}
+.donut-legend .row{display:flex;align-items:center;gap:.25rem;margin-bottom:1px}
+.donut-legend .swatch{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.donut-legend .lbl{color:#999}
+.donut-legend .cnt{color:#555;margin-left:auto}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem}
+.stat-cell{text-align:center;background:rgba(255,255,255,.03);border-radius:8px;padding:.5rem .2rem}
+.stat-big{font-size:1.1rem;font-weight:800;color:#e0e0e0;display:block}
+.stat-sm{font-size:.55rem;color:#777;display:block;margin-top:1px}
+.donut-row{display:flex;gap:.5rem;width:100%;margin-bottom:.5rem}
+.donut-row .donut-card{flex:1 1 calc(50% - .25rem);background:#161822;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.6rem;min-width:280px}
+.footer{text-align:center;color:#222;font-size:.5rem;margin-top:.5rem}
+.module-label{font-size:.8rem;font-weight:700;color:#ccc;margin:.8rem 0 .4rem 0;padding-bottom:.2rem;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:.3rem}
+.module-label .icon{font-size:.9rem}
+.chart-view.hidden{display:none!important}
+.stat-flex{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.stat-card{flex:1 1 calc(50% - .25rem);background:#161822;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.6rem;min-width:280px}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.proj-card{background:#161822;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:.4rem .5rem;text-decoration:none;color:inherit;transition:border-color .2s;cursor:pointer;display:block}
+.mini-stack-row{display:flex;flex-wrap:wrap;gap:.5rem;padding:.2rem 0}
+.mini-stack{flex:1 1 calc(33% - .35rem);min-width:160px;background:rgba(255,255,255,.02);border-radius:6px;padding:.3rem}
+.mini-stack .ms-title{font-size:.55rem;color:#999;margin-bottom:2px}
+.mini-stack .ms-bar{display:flex;height:16px;border-radius:4px;overflow:hidden;background:rgba(255,255,255,.03)}
+.mini-stack .ms-bar .seg{height:100%;min-width:2px}
+.mini-stack .ms-leg{font-size:.5rem;color:#777;margin-top:1px}
+@media(max-width:500px){.proj-grid{grid-template-columns:1fr}}
+
+.module-label{font-size:.7rem;font-weight:700;color:#ccc;margin-bottom:.3rem;display:flex;align-items:center;gap:.3rem;padding-top:.3rem;border-top:1px solid rgba(255,255,255,.04)}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.4rem}
+.proj-card{background:#161822;border:1px solid rgba(255,255,255,.06);border-radius:0 8px 8px 0;padding:.4rem .5rem;text-decoration:none;display:block;transition:border-color .2s}
+.proj-card:hover{border-color:rgba(123,47,255,.3)}
+.p-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.1rem}
+.p-badge{font-size:.5rem;padding:1px 8px;border-radius:8px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+.chart-view{margin-top:.2rem}
+.chart-view.hidden{display:none}
+.footer{text-align:center;font-size:.6rem;color:#555;padding:.6rem 0;border-top:1px solid rgba(255,255,255,.04);margin-top:.5rem}
+.footer a{color:#7b2fff;text-decoration:none}
+
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>COSMOS Dashboard</title>

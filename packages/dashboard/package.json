@@ -1,0 +1,19 @@
+{
+  "name": "@cosmos/dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@cosmos/core": "*",
+    "@cosmos/space": "*",
+    "@cosmos/mykb": "*",
+    "@cosmos/rsis3": "*"
+  },
+  "scripts": {
+    "build": "rolldown -c",
+    "dev": "rolldown -c --watch",
+    "clean": "rm -rf dist"
+  }
+}

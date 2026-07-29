@@ -98,6 +98,98 @@ export function renderCharts(): string {
   }).join('\n');
 }
 
+export function renderDonutChart(
+  id: string,
+  title: string,
+  data: Array<{ label: string; value: number; color: string }>,
+): string {
+  const total = data.reduce((s, d) => s + d.value, 0) || 1;
+  const circumference = 2 * Math.PI * 40; // r=40
+  let offset = 0;
+  const slices = data.map(d => {
+    const dash = (d.value / total) * circumference;
+    const slice = `<circle cx="50" cy="50" r="40" fill="none" stroke="${d.color}" stroke-width="16"
+      stroke-dasharray="${dash} ${circumference - dash}" stroke-dashoffset="${-offset}"
+      transform="rotate(-90 50 50)"/>`;
+    offset += dash;
+    return slice;
+  }).join('\n');
+
+  const legend = data.map(d =>
+    `<div class="row"><span class="swatch" style="background:${d.color}"></span><span class="lbl">${d.label}</span><span class="cnt">${d.value.toLocaleString()}</span></div>`
+  ).join('\n');
+
+  return `<div class="donut-card"><div class="card-header"><span class="icon">🥧</span> ${title}</div>
+    <div class="donut-wrap">
+      <svg class="donut" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="16"/>
+        ${slices}
+      </svg>
+      <div class="donut-legend">${legend}</div>
+    </div></div>`;
+}
+
+export function renderStatsGrid(): string {
+  return `<div class="stat-flex">
+    <div class="stat-card"><div class="card-header"><span class="icon">📊</span> Git Activity</div>
+      <div class="stat-grid">
+        <div class="stat-cell"><span class="stat-big" style="color:#00d4ff">17</span><span class="stat-sm">HMXOT</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#a855f7">10</span><span class="stat-sm">MyKB</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#3b82f6">6</span><span class="stat-sm">SPACE</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#ff8c00">5</span><span class="stat-sm">RSIS3</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#ef4444">3</span><span class="stat-sm">VEPA2</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#555">0</span><span class="stat-sm">GOLF</span></div>
+      </div></div>
+    <div class="stat-card"><div class="card-header"><span class="icon">📈</span> Stats Snapshot</div>
+      <div class="stat-grid">
+        <div class="stat-cell"><span class="stat-big" style="color:#a855f7">${allEntities().toLocaleString()}</span><span class="stat-sm">Total Entities</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#00ff9f">${allFiles().toLocaleString()}</span><span class="stat-sm">Total Files</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#3b82f6">8</span><span class="stat-sm">Active Projects</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#eab308">${allLoc().toLocaleString()}</span><span class="stat-sm">Total LOC</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#00d4ff">3</span><span class="stat-sm">COSMOS Core</span></div>
+        <div class="stat-cell"><span class="stat-big" style="color:#ff8c00">4</span><span class="stat-sm">TS Packages</span></div>
+      </div></div>
+  </div>`;
+}
+
+export function renderDonutRow(): string {
+  const entityData = [
+    { label: 'MyKB', value: 2442, color: '#a855f7' },
+    { label: 'VEPA2', value: 680, color: '#ef4444' },
+    { label: 'SPACE', value: 420, color: '#3b82f6' },
+    { label: 'HMXOT', value: 320, color: '#00d4ff' },
+    { label: 'RSIS3', value: 180, color: '#ff8c00' },
+  ];
+  const locData = [
+    { label: 'HMXOT', value: 952000, color: '#00d4ff' },
+    { label: 'VEPA2', value: 532000, color: '#ef4444' },
+    { label: 'SPACE', value: 209000, color: '#3b82f6' },
+    { label: 'MyKB', value: 68000, color: '#a855f7' },
+    { label: 'RSIS3', value: 42000, color: '#ff8c00' },
+  ];
+  return `<div class="donut-row">
+    ${renderDonutChart('entity-dist', 'Entity Distribution', entityData)}
+    ${renderDonutChart('loc-dist', 'LOC Distribution', locData)}
+  </div>`;
+}
+
+// Helper: compute totals from project data
+function allEntities(): number {
+  let sum = 0;
+  for (const p of projects) if (p.stats?.entities) sum += p.stats.entities;
+  return sum;
+}
+function allFiles(): number {
+  let sum = 0;
+  for (const p of projects) if (p.stats?.files) sum += p.stats.files;
+  return sum;
+}
+function allLoc(): number {
+  let sum = 0;
+  for (const p of projects) if (p.stats?.loc) sum += p.stats.loc;
+  return sum;
+}
+
 function hexToRgb(hex: string): [number, number, number] {
   return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
 }

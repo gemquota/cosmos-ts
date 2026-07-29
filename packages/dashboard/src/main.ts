@@ -1,4 +1,4 @@
-import { renderFilterBar, renderCosmosCard, renderProjectGrid, renderCharts } from './components.js';
+import { renderFilterBar, renderCosmosCard, renderProjectGrid, renderCharts, renderStatsGrid, renderDonutRow } from './components.js';
 
 const app = document.getElementById('app');
 if (!app) throw new Error('#app not found');
@@ -12,6 +12,14 @@ app.innerHTML = `
   <div class="subtitle">All projects · real data · TypeScript</div>
   ${renderCosmosCard()}
   ${renderProjectGrid()}
+  
+  <!-- MODULE: Stats & Activity -->
+  <div class="module-label"><span class="icon">📈</span> Stats &amp; Activity <span class="hdr-sub">small cards + donuts</span></div>
+  ${renderStatsGrid()}
+  
+  <!-- MODULE: Donuts -->
+  <div class="module-label"><span class="icon">🥧</span> Distribution <span class="hdr-sub">entity &amp; LOC breakdown</span></div>
+  ${renderDonutRow()}
   
   <!-- MODULE: Charts -->
   <div class="module-label"><span class="icon">📊</span> Charts <span class="hdr-sub">stacked · toggle for separate bars</span></div>

@@ -8,17 +8,33 @@ export function renderFilterBar(): string {
 }
 
 export function renderCosmosCard(): string {
+  const launchCmds: Record<string, string> = {
+    space: 'cd /dev/cosmos-ts && npx tsx packages/space/src/cli/index.ts',
+    mykb: 'cd /dev/cosmos-ts && npx tsx packages/mykb/src/server.ts',
+    rsis3: 'cd /dev/cosmos-ts && npx tsx packages/rsis3/src/cli.ts',
+  };
+  const launchPorts: Record<string, string> = {
+    space: 'http://localhost:3000',
+    mykb: 'http://localhost:8765',
+    rsis3: 'http://localhost:8080',
+  };
   const comps = cosmosProjects.map(p => {
     const [r, g, b] = hexToRgb(p.color);
     const [br, bg, bb] = hexToRgb(p.badgeColor);
-    return `<a href="${p.href}" style="display:block;background:rgba(${r},${g},${b},.08);border:1px solid rgba(${r},${g},${b},.15);border-radius:8px;padding:.4rem .5rem;text-decoration:none">
+    const cmd = launchCmds[p.id] || '';
+    const port = launchPorts[p.id] || '';
+    return `<div style="background:rgba(${r},${g},${b},.08);border:1px solid rgba(${r},${g},${b},.15);border-radius:8px;padding:.4rem .5rem">
       <div style="display:flex;justify-content:space-between;margin-bottom:.15rem">
         <span style="font-weight:700;font-size:.7rem;color:${p.color}">${p.name}</span>
         <span style="font-size:.5rem;padding:1px 8px;border-radius:8px;background:rgba(${br},${bg},${bb},.15);color:${p.badgeColor};border:1px solid rgba(${br},${bg},${bb},.25);font-weight:600">${p.badge}</span>
       </div>
       <div style="font-size:.55rem;color:#999;margin-bottom:.1rem">${p.stats ? `${p.stats.files.toLocaleString()} files · ${(p.stats.loc/1000).toFixed(0)}k LOC` : ''}</div>
-      <div style="font-size:.5rem;color:#666">${p.description}</div>
-    </a>`;
+      <div style="font-size:.5rem;color:#666;margin-bottom:.3rem">${p.description}</div>
+      <div style="display:flex;gap:.25rem;flex-wrap:wrap">
+        <a href="${p.href}" target="_blank" style="font-size:.5rem;padding:2px 10px;border-radius:6px;background:rgba(255,255,255,.06);color:#888;border:1px solid rgba(255,255,255,.1);text-decoration:none">📊 Dashboard</a>
+        <a href="${port}" target="_blank" onclick="if(this.href==='${port}'){event.preventDefault();navigator.clipboard.writeText('${cmd}');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='▶ Launch',1500)}" style="font-size:.5rem;padding:2px 10px;border-radius:6px;background:rgba(0,255,159,.1);color:#00ff9f;border:1px solid rgba(0,255,159,.2);text-decoration:none;font-weight:600">▶ Launch</a>
+      </div>
+    </div>`;
   }).join('\n');
 
   return `<!-- MODULE: COSMOS -->

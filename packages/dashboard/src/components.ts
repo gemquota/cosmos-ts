@@ -1,15 +1,14 @@
-import { Project, projects, cosmosComponents, otherProjects } from './data/projects.js';
+import { Project, cosmosProjects } from './data/projects.js';
 
 export function renderFilterBar(): string {
   return `<div class="filter-bar">
-    <a href="index.html" class="filter-btn active">All</a>
-    <a href="ai.html" class="filter-btn">☯ AI / RSI</a>
-    <a href="non-ai.html" class="filter-btn">🔧 Non-AI</a>
+    <a href="index.html" class="filter-btn active">🌌 COSMOS</a>
+    <a href="https://gemquota.github.io/hub/" class="filter-btn" target="_blank">📊 Hub</a>
   </div>`;
 }
 
 export function renderCosmosCard(): string {
-  const comps = cosmosComponents.map(p => {
+  const comps = cosmosProjects.map(p => {
     const [r, g, b] = hexToRgb(p.color);
     const [br, bg, bb] = hexToRgb(p.badgeColor);
     return `<a href="${p.href}" style="display:block;background:rgba(${r},${g},${b},.08);border:1px solid rgba(${r},${g},${b},.15);border-radius:8px;padding:.4rem .5rem;text-decoration:none">
@@ -30,9 +29,9 @@ export function renderCosmosCard(): string {
     <div>
       <div style="font-size:.9rem;font-weight:700;color:#e0e0e0">Comprehensive Ontological System for Meta-cognitive Orchestration &amp; Synthesis</div>
       <div style="font-size:.6rem;color:#666;margin-top:1px">
-        <span style="color:#a855f7">${cosmosComponents.length} components</span>
-        · <span style="color:#3b82f6">~${sum(cosmosComponents, p => p.stats?.files ?? 0).toLocaleString()} files</span>
-        · <span style="color:#00ff9f">~${(sum(cosmosComponents, p => p.stats?.loc ?? 0)/1000).toFixed(0)}k LOC</span>
+        <span style="color:#a855f7">${cosmosProjects.length} components</span>
+        · <span style="color:#3b82f6">~${sum(cosmosProjects, p => p.stats?.files ?? 0).toLocaleString()} files</span>
+        · <span style="color:#00ff9f">~${(sum(cosmosProjects, p => p.stats?.loc ?? 0)/1000).toFixed(0)}k LOC</span>
       </div>
     </div>
     <div style="margin-left:auto;display:flex;gap:.3rem">
@@ -54,35 +53,19 @@ export function renderCosmosCard(): string {
 }
 
 export function renderProjectGrid(): string {
-  const cards = otherProjects.map(p => {
-    const [br, bg, bb] = hexToRgb(p.badgeColor);
-    const pills = p.tags.map(t => `<span style="font-size:.5rem;padding:1px 6px;border-radius:8px;background:rgba(255,255,255,.06);color:#999;border:1px solid rgba(255,255,255,.04)">${t}</span>`).join('');
-    return `<a href="${p.href}" class="proj-card" style="border-left:3px solid ${p.color}">
-      <div class="p-row"><span style="font-weight:700;font-size:.8rem;color:${p.color}">${p.name}</span>
-      <span class="p-badge ${p.badge.toLowerCase()}" style="font-size:.5rem;padding:1px 8px;border-radius:8px;background:rgba(${br},${bg},${bb},.15);color:${p.badgeColor};border:1px solid rgba(${br},${bg},${bb},.25);font-weight:600;letter-spacing:.3px">${p.badge}</span></div>
-      <div style="font-size:.6rem;color:#777;margin:.1rem 0 .2rem">${p.description}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:.2rem">${pills}</div>
-    </a>`;
-  }).join('\n');
-  
-  return `<!-- MODULE: Other Projects -->
-<div class="module-label"><span class="icon">🗂️</span> Other Projects</div>
-<div class="card"><div class="proj-grid">${cards}</div></div>`;
+  return '';
 }
 
 export function renderCharts(): string {
   const charts = [
     { id: 'disk-usage', icon: '💾', title: 'Disk Usage', data: [
-      ['SPACE', 46.5, '#3b82f6', '512MB'], ['VEPA2', 31.6, '#ef4444', '348MB'], ['MyKB', 19.5, '#a855f7', '215MB'],
-      ['HMXOT', 14.5, '#00d4ff', '160MB'], ['GOLF', 8.4, '#eab308', '92MB'], ['RSIS3', 2.8, '#ff8c00', '31MB'] ] },
+      ['SPACE', 46.5, '#3b82f6', '512MB'], ['MyKB', 19.5, '#a855f7', '215MB'], ['RSIS3', 2.8, '#ff8c00', '31MB'] ] },
     { id: 'entity-count', icon: '📦', title: 'Entity Count', data: [
-      ['VEPA2', 39.9, '#ef4444', '680'], ['SPACE', 24.6, '#3b82f6', '420'], ['HMXOT', 18.8, '#00d4ff', '320'], ['RSIS3', 10.6, '#ff8c00', '180'] ] },
+      ['MyKB', 70.0, '#a855f7', '2,442'], ['SPACE', 20.0, '#3b82f6', '420'], ['RSIS3', 10.0, '#ff8c00', '180'] ] },
     { id: 'file-count', icon: '📄', title: 'File Count', data: [
-      ['SPACE', 37.0, '#3b82f6', '9,901'], ['VEPA2', 33.6, '#ef4444', '8,982'], ['MyKB', 12.5, '#a855f7', '3,351'],
-      ['HMXOT', 4.7, '#00d4ff', '1,269'], ['RSIS3', 2.3, '#ff8c00', '627'] ] },
+      ['SPACE', 54.0, '#3b82f6', '4,704'], ['MyKB', 38.0, '#a855f7', '3,351'], ['RSIS3', 8.0, '#ff8c00', '627'] ] },
     { id: 'loc', icon: '⚡', title: 'Lines of Code', data: [
-      ['HMXOT', 45.1, '#00d4ff', '952k'], ['VEPA2', 25.2, '#ef4444', '532k'], ['SPACE', 9.9, '#3b82f6', '209k'],
-      ['MyKB', 3.2, '#a855f7', '68k'], ['RSIS3', 2.0, '#ff8c00', '42k'] ] },
+      ['SPACE', 73.0, '#3b82f6', '209k'], ['MyKB', 24.0, '#a855f7', '68k'], ['RSIS3', 3.0, '#ff8c00', '7.4k'] ] },
   ];
 
   return charts.map(c => {
@@ -155,17 +138,13 @@ export function renderStatsGrid(): string {
 export function renderDonutRow(): string {
   const entityData = [
     { label: 'MyKB', value: 2442, color: '#a855f7' },
-    { label: 'VEPA2', value: 680, color: '#ef4444' },
     { label: 'SPACE', value: 420, color: '#3b82f6' },
-    { label: 'HMXOT', value: 320, color: '#00d4ff' },
     { label: 'RSIS3', value: 180, color: '#ff8c00' },
   ];
   const locData = [
-    { label: 'HMXOT', value: 952000, color: '#00d4ff' },
-    { label: 'VEPA2', value: 532000, color: '#ef4444' },
     { label: 'SPACE', value: 209000, color: '#3b82f6' },
     { label: 'MyKB', value: 68000, color: '#a855f7' },
-    { label: 'RSIS3', value: 42000, color: '#ff8c00' },
+    { label: 'RSIS3', value: 7412, color: '#ff8c00' },
   ];
   return `<div class="donut-row">
     ${renderDonutChart('entity-dist', 'Entity Distribution', entityData)}
@@ -176,17 +155,17 @@ export function renderDonutRow(): string {
 // Helper: compute totals from project data
 function allEntities(): number {
   let sum = 0;
-  for (const p of projects) if (p.stats?.entities) sum += p.stats.entities;
+  for (const p of cosmosProjects) sum += 0; // entities not in Project type
   return sum;
 }
 function allFiles(): number {
   let sum = 0;
-  for (const p of projects) if (p.stats?.files) sum += p.stats.files;
+  for (const p of cosmosProjects) if (p.stats?.files) sum += p.stats.files;
   return sum;
 }
 function allLoc(): number {
   let sum = 0;
-  for (const p of projects) if (p.stats?.loc) sum += p.stats.loc;
+  for (const p of cosmosProjects) if (p.stats?.loc) sum += p.stats.loc;
   return sum;
 }
 

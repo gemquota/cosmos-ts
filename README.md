@@ -1,3 +1,5 @@
+> **⚠️ DEPRECATED** — This TypeScript monorepo is deprecated. The COSMOS ecosystem has moved to a lighter HTML-based dashboard at [gemquota/cosmos](https://github.com/gemquota/cosmos). The component source code remains available in the  directory of that repo.
+
 # cosmos-ts 🌌
 
 **Comprehensive Ontological System for Meta-cognitive Orchestration & Synthesis**

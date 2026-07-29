@@ -12,8 +12,11 @@
     "@cosmos/rsis3": "*"
   },
   "scripts": {
-    "build": "rolldown -c",
-    "dev": "rolldown -c --watch",
+    "build": "vite build",
+    "dev": "vite",
     "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
   }
 }

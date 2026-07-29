@@ -91,7 +91,7 @@ export function renderCharts(): string {
     const grouped = c.data.map(d => `<div class="comp-row"><span class="lbl">${d[0]}</span><div class="track"><div class="fill" style="width:${d[1]}%;background:${d[2]}"></div></div><span class="pct">${d[3]}</span></div>`).join('');
     
     return `<div class="card">
-      <div class="card-header"><span class="icon">${c.icon}</span> ${c.title}<span class="chart-toggle" data-target="${c.id}" onclick="toggleChart('${c.id}')">▤ Separate</span></div>
+      <div class="card-header"><span class="icon">${c.icon}</span> ${c.title}<span class="chart-toggle" data-target="${c.id}">▤ Separate</span></div>
       <div id="${c.id}-stacked" class="chart-view"><div class="stacked-bar-wrap"><div class="stacked-bar">${stacked}</div><div class="stacked-legend">${legend}</div></div></div>
       <div id="${c.id}-grouped" class="chart-view hidden">${grouped}</div>
     </div>`;
